@@ -30,6 +30,11 @@ const handle = (blockingSlots, duration) => {
     const maxTime = 1440;
     let startTime = null;
     let endTime = null;
+
+    if (duration === 0) {
+        return false;
+    }
+
     //Sort on property endTime
     blockingSlots.sort((slot1, slot2) => slot1.endTime - slot2.endTime)
     console.log(blockingSlots)
@@ -67,8 +72,5 @@ const handle = (blockingSlots, duration) => {
     return { message: 'Slot full :>' }
 }
 
-console.log(handle(input, 20));
-console.log(handle(input, 30));
-console.log(handle(input, 40));
-console.log(handle(input,10));
-console.log(handle(input,0));
+
+console.log(handle(input, 0));
