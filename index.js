@@ -13,42 +13,49 @@ const input = [{
     startTime: 110,
     endTime: 150
 },
+{
+    id: 4,
+    startTime: 100,
+    endTime: 160,
+},
+{
+    id: 5,
+    startTime: 190,
+    endTime: 200,
+}
 ]
 
-const handle = (input, num) => {
-    let min = 0;
-    const max = 1440;
+const handle = (blockingSlots, duration) => {
+    let minTime = 0;
+    const maxTime = 1440;
 
 
-    //Selection Sort on property startTime
-    for (let i = 0; i < input.length - 1; i++) {
-        for (let j = i + 1; j < input.length; j++) {
-            if (input[i].startTime > input[j].startTime) {
-                let temp = input[j];
-                input[j] = input[i];
-                input[i] = temp;
-            }
-        }
-    }
+    //Sort on property endTime
+    blockingSlots.sort((slot1, slot2) => slot1.endTime - slot2.endTime)
+    console.log(blockingSlots)
+
 
     //Find early startTime and endTime non-blocking
-    for (let i = 0; i < input.length; i++) {
-        if (input[i].startTime - min >= num) {
+    for (let i = 0; i < blockingSlots.length; i++) {
+        if (blockingSlots[i].startTime - minTime >= duration) {
             return {
-                startTime: min,
-                endTime: min + num
+                startTime: minTime,
+                endTime: minTime + duration
             }
         } else {
-            min = input[i].endTime;
+            minTime = blockingSlots[i].endTime;
         }
     }
-    if (input[input.length - 1].endTime + num <= max) {
+
+    if (blockingSlots[blockingSlots.length - 1].endTime + duration <= maxTime) {
         return {
-            startTime: input[input.length - 1].endTime,
-            endTime: input[input.length - 1].endTime + num
+            startTime: blockingSlots[blockingSlots.length - 1].endTime,
+            endTime: blockingSlots[blockingSlots.length - 1].endTime + duration
         }
     }
+
+    // When can not find slot
     return { message: 'Slot full :>' }
 }
 
-console.log(handle(input, 30));
+console.log(handle(input, 20));
