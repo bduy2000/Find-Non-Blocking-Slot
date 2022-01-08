@@ -31,9 +31,7 @@ const handle = (blockingSlots, duration) => {
     let startTime = null;
     let endTime = null;
 
-    if (duration === 0) {
-        return false;
-    }
+    
 
     //Sort on property endTime
     blockingSlots.sort((slot1, slot2) => slot1.endTime - slot2.endTime)
@@ -43,21 +41,23 @@ const handle = (blockingSlots, duration) => {
     //Find early startTime and endTime non-blocking
     for (let i = 0; i < blockingSlots.length; i++) {
         // if endTime of non blocking slot at last > startTime of blockingslots now => fail  
-        if (endTime != null && endTime > blockingSlots[i].startTime) {
+        if (endTime != null && endTime > blockingSlots[i].startTime ) {
             startTime = null;
             endTime = null;
+           
         }
 
         // if having non blocking slot for duration
-        if (blockingSlots[i].startTime - minTime >= duration) {
+        if (blockingSlots[i].startTime - minTime >= duration && startTime == null && endTime == null) {
             startTime = minTime;
             endTime = minTime + duration;
-        } else {
-            minTime = blockingSlots[i].endTime;
+        
         }
+            minTime = blockingSlots[i].endTime;
+        
     }
     //check startTime ,endTime of non blocking slot
-    if (startTime && endTime) {
+    if (startTime != null && endTime != null) {
         return { startTime, endTime }
     }
 
